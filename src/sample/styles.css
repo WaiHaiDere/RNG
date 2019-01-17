@@ -1,14 +1,23 @@
 #mainPane{
-    -fx-background-image: url(https://previews.123rf.com/images/darrenwhi/darrenwhi1302/darrenwhi130200064/17905499-illustration-of-bingo-balls-over-a-blue-starburst-background.jpg);
+    -fx-background-image: url(https://i.imgur.com/z8ybyyN.jpg);
+    -fx-background-size: 100%;
+    -fx-background-repeat: no-repeat;
 }
 
 #auzziePane{
-   -fx-background-color: #0057ff;
+   -fx-background-color: #1496d2;
 
 }
 
 #nzPane{
-    -fx-background-color: #0057ff;
+    -fx-background-color: #1496d2;
+}
 
+Button{
+    -fx-background-color: #404040;
+    -fx-text-fill: #1496d2;
+}
 
+#labelPane{
+    -fx-background-color:  white;
 }
