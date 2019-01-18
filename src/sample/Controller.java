@@ -9,16 +9,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.net.URL;
+import java.net.MalformedURLException;
+
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 
-public class Controller implements Initializable {
+
+public class Controller {
 
     @FXML
     private Button startButton;
@@ -35,6 +39,12 @@ public class Controller implements Initializable {
     @FXML
     private Label pictureLabel;
 
+    @FXML
+    private Button importBtn;
+
+    @FXML
+    private Button clearBtn;
+
     private List<PictureObject> pictureList = new ArrayList<PictureObject>();
 
     private List<Integer> doneNumbers = new ArrayList<Integer>();
@@ -48,11 +58,15 @@ public class Controller implements Initializable {
     private int currentIndex;
 
 
+
+
     public void handleRestartButton(ActionEvent actionEvent) {
         doneNumbers.clear();
         restartButton.setDisable(true);
         startButton.setDisable(false);
         nextButton.setDisable(true);
+        importBtn.setDisable(false);
+        clearBtn.setDisable(false);
         imageViewWindow.setImage(null);
         pictureLabel.setText("");
         numberOfPlays = 0;
@@ -63,53 +77,23 @@ public class Controller implements Initializable {
     }
 
     public void handleStartAction(ActionEvent actionEvent) {
-        getImage();
-        startButton.setDisable(true);
-        restartButton.setDisable(false);
-        nextButton.setDisable(false);
+        if(pictureList.isEmpty()){
+            showAlert("ERROR", "No images found");
+        } else {
+            getImage();
+            startButton.setDisable(true);
+            restartButton.setDisable(false);
+            nextButton.setDisable(false);
+            importBtn.setDisable(true);
+            clearBtn.setDisable(true);
+        }
 
     }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        PictureObject pic = new PictureObject("Crunchie", new Image("sample/Crunchie.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Fairy Bread", new Image("sample/FairyBread.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Fish and Chips", new Image("sample/FishAndChips.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Hangi", new Image("sample/Hangi.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Kakapo", new Image("sample/Kakapo.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Kangaroo", new Image("sample/Kangaroo.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Kiwi", new Image("sample/Kiwi.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Koala", new Image("sample/Koala.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Lamington", new Image("sample/Lamington.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("L And P", new Image("sample/LandP.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Little Blue Penguin", new Image("sample/LittleBluePenguin.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Marmite", new Image("sample/Marmite.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Pavlova", new Image("sample/Pavlova.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Quokka", new Image("sample/Quokka.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Tim Tams", new Image("sample/TimTams.JPG"));
-        pictureList.add(pic);
-        pic = new PictureObject("Vegemite", new Image("sample/Vegemite.JPG"));
-        pictureList.add(pic);
-
-    }
+    
 
     public int randomNumber(){
-        int n = rand.nextInt(16);
-        if (numberOfPlays==16){
+        int n = rand.nextInt(pictureList.size());
+        if (numberOfPlays==pictureList.size()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("GAME FINISHED");
             alert.setHeaderText(null);
@@ -119,7 +103,7 @@ public class Controller implements Initializable {
             return currentIndex;
         }
         while (doneNumbers.contains(n)){
-            n = rand.nextInt(16);
+            n = rand.nextInt(pictureList.size());
         }
         doneNumbers.add(n);
         numberOfPlays++;
@@ -132,5 +116,60 @@ public class Controller implements Initializable {
 
         pictureLabel.setText(currentPic.getName());
         imageViewWindow.setImage(currentPic.getImage());
+    }
+
+    public void handleImportBtn(ActionEvent actionEvent) {
+
+        getFile(importBtn);
+
+
+
+    }
+
+    private void getFile(Button btn) {
+        List<File> pictureFileList;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Pictures");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        pictureFileList = fileChooser.showOpenMultipleDialog(btn.getScene().getWindow());
+
+
+        for(File selectedFile: pictureFileList) {
+
+            if ((selectedFile != null) && (selectedFile.getPath().substring(selectedFile.getAbsolutePath().lastIndexOf('.')).toLowerCase().equals(".jpg"))) {
+                String temp = selectedFile.getPath();
+                int slash = temp.lastIndexOf('\\');
+                int dot = temp.lastIndexOf('.');
+
+                String name = temp.substring(slash + 1, dot);
+
+
+
+                try {
+                    Image img = new Image(String.valueOf(selectedFile.toURL()));
+                    pictureList.add(new PictureObject(name, img));
+                } catch (MalformedURLException e){
+
+                }
+
+
+
+            } else {
+                showAlert("ERROR - Not a valid file", "Please choose a .txt file to import");
+            }
+        }
+    }
+
+    private void showAlert(String title, String message) {
+
+        Alert nonSelectedAlert = new Alert(Alert.AlertType.INFORMATION);
+        nonSelectedAlert.setTitle(title);
+        nonSelectedAlert.setHeaderText(null);
+        nonSelectedAlert.setContentText(message);
+        nonSelectedAlert.showAndWait();
+    }
+
+    public void handleClearAction(ActionEvent actionEvent) {
+        pictureList.clear();
     }
 }

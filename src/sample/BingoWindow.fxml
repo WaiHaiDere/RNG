@@ -17,7 +17,7 @@
                </ImageView>
             <Pane id="labelPane" layoutY="500.0" prefHeight="100.0" prefWidth="1024.0">
                <children>
-                  <Label  fx:id="pictureLabel" layoutX="464.0" layoutY="21.0">
+                  <Label fx:id="pictureLabel" layoutX="464.0" layoutY="21.0">
                      <font>
                         <Font size="41.0" />
                      </font>
@@ -37,6 +37,8 @@
                               <Font size="47.0" />
                            </font>
                         </Button>
+                        <Button fx:id="importBtn" layoutX="441.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleImportBtn" text="Import" />
+                        <Button fx:id="clearBtn" layoutX="445.0" layoutY="126.0" mnemonicParsing="false" onAction="#handleClearAction" text="Clear" />
                      </children>
                      <HBox.margin>
                         <Insets />
