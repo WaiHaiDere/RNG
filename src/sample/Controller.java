@@ -100,7 +100,7 @@ public class Controller implements Initializable {
             nextButton.setDisable(false);
             importBtn.setDisable(true);
             clearBtn.setDisable(true);
-            
+
         }
 
     }
