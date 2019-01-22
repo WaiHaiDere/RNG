@@ -1,7 +1,5 @@
 #mainPane{
-    -fx-background-image: url(https://i.imgur.com/z8ybyyN.jpg);
-    -fx-background-size: 100%;
-    -fx-background-repeat: no-repeat;
+    -fx-background-color: white;
 }
 
 #auzziePane{

@@ -24,7 +24,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 
-public class Controller {
+public class Controller implements Initializable {
 
     @FXML
     private Button startButton;
@@ -63,7 +63,7 @@ public class Controller {
 
     private int currentIndex;
 
-    private Image backgroundImage = new Image("https://i.imgur.com/z8ybyyN.jpg");
+    private Image backgroundImage = new Image("https://i.imgur.com/LuuEs0f.jpg");
 
 
 
@@ -82,9 +82,8 @@ public class Controller {
         numberOfPlays = 0;
         currentPic= null;
 
-//        mainPane.setStyle("-fx-background-image: url(https://i.imgur.com/z8ybyyN.jpg);" +
-//                "    -fx-background-size: 100%;" +
-//                "    -fx-background-repeat: no-repeat;");
+        imageViewWindow.setImage(backgroundImage);
+
     }
 
     public void handleNextButton(ActionEvent actionEvent) {
@@ -101,9 +100,7 @@ public class Controller {
             nextButton.setDisable(false);
             importBtn.setDisable(true);
             clearBtn.setDisable(true);
-
-//            mainPane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-//            mainPane.setStyle("-fx-background-color: white;");
+            
         }
 
     }
@@ -203,10 +200,8 @@ public class Controller {
         }
     }
 
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        mainPane.setStyle("-fx-background-image: url(https://i.imgur.com/z8ybyyN.jpg);" +
-//                "    -fx-background-size: 100%;" +
-//                "    -fx-background-repeat: no-repeat;");
-//    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        imageViewWindow.setImage(backgroundImage);
+    }
 }
