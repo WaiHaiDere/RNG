@@ -9,18 +9,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.MalformedURLException;
 
 
-
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import java.util.ResourceBundle;
 
 
 public class Controller {
@@ -62,6 +63,8 @@ public class Controller {
 
     private int currentIndex;
 
+    private Image backgroundImage = new Image("https://i.imgur.com/z8ybyyN.jpg");
+
 
 
 
@@ -77,6 +80,11 @@ public class Controller {
         imageViewWindow.setImage(null);
         labelButton.setText("");
         numberOfPlays = 0;
+        currentPic= null;
+
+//        mainPane.setStyle("-fx-background-image: url(https://i.imgur.com/z8ybyyN.jpg);" +
+//                "    -fx-background-size: 100%;" +
+//                "    -fx-background-repeat: no-repeat;");
     }
 
     public void handleNextButton(ActionEvent actionEvent) {
@@ -93,6 +101,9 @@ public class Controller {
             nextButton.setDisable(false);
             importBtn.setDisable(true);
             clearBtn.setDisable(true);
+
+//            mainPane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+//            mainPane.setStyle("-fx-background-color: white;");
         }
 
     }
@@ -147,29 +158,28 @@ public class Controller {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         pictureFileList = fileChooser.showOpenMultipleDialog(btn.getScene().getWindow());
 
+        if(pictureFileList != null) {
+            for (File selectedFile : pictureFileList) {
 
-        for(File selectedFile: pictureFileList) {
+                if ((selectedFile != null) && (selectedFile.getPath().substring(selectedFile.getAbsolutePath().lastIndexOf('.')).toLowerCase().equals(".jpg"))) {
+                    String temp = selectedFile.getPath();
+                    int slash = temp.lastIndexOf('\\');
+                    int dot = temp.lastIndexOf('.');
 
-            if ((selectedFile != null) && (selectedFile.getPath().substring(selectedFile.getAbsolutePath().lastIndexOf('.')).toLowerCase().equals(".jpg"))) {
-                String temp = selectedFile.getPath();
-                int slash = temp.lastIndexOf('\\');
-                int dot = temp.lastIndexOf('.');
-
-                String name = temp.substring(slash + 1, dot);
+                    String name = temp.substring(slash + 1, dot);
 
 
+                    try {
+                        Image img = new Image(String.valueOf(selectedFile.toURL()));
+                        pictureList.add(new PictureObject(name, img));
+                    } catch (MalformedURLException e) {
 
-                try {
-                    Image img = new Image(String.valueOf(selectedFile.toURL()));
-                    pictureList.add(new PictureObject(name, img));
-                } catch (MalformedURLException e){
+                    }
 
+
+                } else {
+                    showAlert("ERROR - Not a valid file", "Please choose a .txt file to import");
                 }
-
-
-
-            } else {
-                showAlert("ERROR - Not a valid file", "Please choose a .txt file to import");
             }
         }
     }
@@ -188,6 +198,15 @@ public class Controller {
     }
 
     public void labelButtonAction(ActionEvent actionEvent) {
-        labelButton.setText(currentPic.getName());
+        if(currentPic != null) {
+            labelButton.setText(currentPic.getName());
+        }
     }
+
+//    @Override
+//    public void initialize(URL location, ResourceBundle resources) {
+//        mainPane.setStyle("-fx-background-image: url(https://i.imgur.com/z8ybyyN.jpg);" +
+//                "    -fx-background-size: 100%;" +
+//                "    -fx-background-repeat: no-repeat;");
+//    }
 }
