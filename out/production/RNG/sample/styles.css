@@ -18,6 +18,8 @@ Button{
     -fx-text-fill: #1496d2;
 }
 
-#labelPane{
+#label-button{
     -fx-background-color:  white;
-}
+    -fx-text-fill: black;
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;}

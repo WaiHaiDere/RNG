@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -37,13 +38,17 @@ public class Controller {
     private ImageView imageViewWindow;
 
     @FXML
-    private Label pictureLabel;
+    private Button labelButton;
 
     @FXML
     private Button importBtn;
 
     @FXML
     private Button clearBtn;
+
+
+    @FXML
+    private Pane mainPane;
 
     private List<PictureObject> pictureList = new ArrayList<PictureObject>();
 
@@ -60,6 +65,8 @@ public class Controller {
 
 
 
+
+
     public void handleRestartButton(ActionEvent actionEvent) {
         doneNumbers.clear();
         restartButton.setDisable(true);
@@ -68,7 +75,7 @@ public class Controller {
         importBtn.setDisable(false);
         clearBtn.setDisable(false);
         imageViewWindow.setImage(null);
-        pictureLabel.setText("");
+        labelButton.setText("");
         numberOfPlays = 0;
     }
 
@@ -114,8 +121,15 @@ public class Controller {
         currentIndex = randomNumber();
         currentPic = pictureList.get(currentIndex);
 
-        pictureLabel.setText(currentPic.getName());
+        double height = currentPic.getImage().getHeight();
+        double width = currentPic.getImage().getWidth();
+
+        labelButton.setText("");
         imageViewWindow.setImage(currentPic.getImage());
+        imageViewWindow.setFitHeight(height);
+        imageViewWindow.setFitWidth(width);
+
+
     }
 
     public void handleImportBtn(ActionEvent actionEvent) {
@@ -171,5 +185,9 @@ public class Controller {
 
     public void handleClearAction(ActionEvent actionEvent) {
         pictureList.clear();
+    }
+
+    public void labelButtonAction(ActionEvent actionEvent) {
+        labelButton.setText(currentPic.getName());
     }
 }
